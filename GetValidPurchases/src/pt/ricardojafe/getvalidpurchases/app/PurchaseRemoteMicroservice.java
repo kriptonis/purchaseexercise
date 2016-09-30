@@ -167,4 +167,9 @@ public class PurchaseRemoteMicroservice extends HttpServlet {
 		return "Purchase Service";
 	}// </editor-fold>
 	
+	
+	public static void main(String[] args) {
+		PurchaseRemoteMicroservice p = new PurchaseRemoteMicroservice();
+		p.parseDetails("2,coisas,4,5;6,ping,4,5");
+	}
 }

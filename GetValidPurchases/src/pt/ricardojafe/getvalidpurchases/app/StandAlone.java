@@ -1,5 +1,7 @@
 package pt.ricardojafe.getvalidpurchases.app;
 
+import java.util.Date;
+
 /**
  *
 You need to develop an API for other backend services to fetch and store product purchases.
@@ -30,7 +32,9 @@ Feel free to add other relevant operations in the context of a microservice.
 public class StandAlone {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		Date d = new Date();
+		
+		System.out.println(d.getTime());
 
 	}
 

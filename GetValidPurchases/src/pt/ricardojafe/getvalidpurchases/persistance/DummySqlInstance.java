@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
@@ -16,11 +17,11 @@ public class DummySqlInstance implements IPurchaseDS {
 
 	private static Date today = new Date();//helper to always have same test behaviour in the dummy data
 	private Purchase [] purchases = { 
-        new Purchase(1,"CoolType",new Date(today.getTime() + (1000 * 60 * 60 * 24))),
-        new Purchase(2,"HotType",new Date(today.getTime() + (1000 * 60 * 60 * 24 * 30))),
-        new Purchase(3,"WarmType",new Date(today.getTime() + (1000 * 60 * 60 * 24 * 7))),
-        new Purchase(4,"ExpiredType",new Date(today.getTime() - (1000 * 60 * 60 * 24 * 7))),
-    };
+			new Purchase(1,"CoolType",new Date(today.getTime() + (1000 * 60 * 60 * 24))),
+			new Purchase(2,"HotType",new Date(today.getTime() + (1000 * 60 * 60 * 24 * 30))),
+			new Purchase(3,"WarmType",new Date(today.getTime() + (1000 * 60 * 60 * 24 * 7))),
+			new Purchase(4,"ExpiredType",new Date(today.getTime() - (1000 * 60 * 60 * 24 * 7))),
+	};
 	private PurchaseDetail [] purchaseDetails={
 			new PurchaseDetail(101, "Banana", 10, 5),
 			new PurchaseDetail(102, "Morango", 7, 5),
@@ -30,7 +31,7 @@ public class DummySqlInstance implements IPurchaseDS {
 			new PurchaseDetail(106, "Resmas Papel", 23, 98),
 			new PurchaseDetail(106, "Disketes", 123, 200),
 	};
-	
+
 	public DummySqlInstance() {
 		purchases[0].setPurchaseDetails(Arrays.asList(purchaseDetails[0],purchaseDetails[1]));
 		purchases[1].setPurchaseDetails(Arrays.asList(purchaseDetails[2],purchaseDetails[3]));
@@ -44,12 +45,20 @@ public class DummySqlInstance implements IPurchaseDS {
 	 * @return
 	 */
 	public List<Purchase> getValidPurchases(Date date) {
-		return Arrays.asList(purchases).stream().filter(o -> o.getExpires().after(date)).collect(Collectors.toList());
+		try{
+			return Arrays.asList(purchases).stream().filter(o -> o.getExpires().after(date)).collect(Collectors.toList());
+		}catch(NoSuchElementException e){
+			return null;
+		}
 	}
-	
+
 	@Override
 	public Purchase getPurchaseById(long purchaseId) {
-		return Arrays.asList(purchases).stream().filter(o -> o.getId() == purchaseId).findFirst().get();
+		try{
+			return Arrays.asList(purchases).stream().filter(o -> o.getId() == purchaseId).findFirst().get();
+		}catch(NoSuchElementException e){
+			return null;
+		}
 	}
 
 	@Override
@@ -57,14 +66,22 @@ public class DummySqlInstance implements IPurchaseDS {
 		List<Purchase> resultSet = new ArrayList<Purchase>();
 		Stream<Purchase> stream = Arrays.asList(purchases).stream(); 
 		for(long id : ids){
-		resultSet.add(stream.filter(o -> o.getId() == id).findFirst().get());
+			try{
+				resultSet.add(stream.filter(o -> o.getId() == id).findFirst().get());
+			}catch(NoSuchElementException e){
+				continue;
+			}
 		}
 		return resultSet;
 	}
 
 	@Override
 	public PurchaseDetail getPurchaseDetailById(long purchaseId) {
-		return Arrays.asList(purchaseDetails).stream().filter(o -> o.getId() == purchaseId).findFirst().get();
+		try{
+			return Arrays.asList(purchaseDetails).stream().filter(o -> o.getId() == purchaseId).findFirst().get();
+		}catch(NoSuchElementException e){
+			return null;
+		}
 	}
 
 	@Override
@@ -77,7 +94,10 @@ public class DummySqlInstance implements IPurchaseDS {
 	public List<PurchaseDetail> getPurchaseDetailsByPurchaseIds(long[] ids) {
 		List<PurchaseDetail> purchaseDetails = new ArrayList<>();
 		for(long id : ids){
-			purchaseDetails.add(getPurchaseDetailById(id));
+			PurchaseDetail pd = getPurchaseDetailById(id);
+			if(pd != null){
+				purchaseDetails.add(pd);
+			}
 		}
 		return purchaseDetails;
 	}
@@ -91,13 +111,13 @@ public class DummySqlInstance implements IPurchaseDS {
 	public List<Purchase> getAllPurchasesPaginatedOrderedById(long startId, long endId) {
 		List<Purchase> pAsList = Arrays.asList(purchases);
 		Collections.sort(pAsList, new Comparator<Purchase>() {
-	        @Override
-	        public int compare(Purchase p1, Purchase p2)
-	        {
-	            return  p1.getId() < p2.getId() ? -1 :
-	            		p1.getId() > p2.getId() ? 1 : 0;
-	        }
-	    });
+			@Override
+			public int compare(Purchase p1, Purchase p2)
+			{
+				return  p1.getId() < p2.getId() ? -1 :
+					p1.getId() > p2.getId() ? 1 : 0;
+			}
+		});
 		List<Purchase> resultSet = new ArrayList<>();
 		for(int i = 0 ; i < endId ; i++){
 			if(pAsList.get(i).getId() > startId){
@@ -119,13 +139,13 @@ public class DummySqlInstance implements IPurchaseDS {
 	public List<PurchaseDetail> getAllPurchaseDetailsPaginatedOrderedById(long startId, long endId) {
 		List<PurchaseDetail> pAsList = Arrays.asList(purchaseDetails);
 		Collections.sort(pAsList, new Comparator<PurchaseDetail>() {
-	        @Override
-	        public int compare(PurchaseDetail p1, PurchaseDetail p2)
-	        {
-	            return  p1.getId() < p2.getId() ? -1 :
-	            		p1.getId() > p2.getId() ? 1 : 0;
-	        }
-	    });
+			@Override
+			public int compare(PurchaseDetail p1, PurchaseDetail p2)
+			{
+				return  p1.getId() < p2.getId() ? -1 :
+					p1.getId() > p2.getId() ? 1 : 0;
+			}
+		});
 		List<PurchaseDetail> resultSet = new ArrayList<>();
 		for(int i = 0 ; i < endId ; i++){
 			if(pAsList.get(i).getId() > startId){
@@ -157,14 +177,14 @@ public class DummySqlInstance implements IPurchaseDS {
 		PurchaseDetail pd = getPurchaseDetailById(purchaseDetail.getId());
 		if(pd == null){
 			List<PurchaseDetail> aux = Arrays.asList(purchaseDetails);
-			aux.add(purchaseDetail);
-			purchaseDetails = aux.toArray(purchaseDetails);
+			purchaseDetails = aux.toArray(new PurchaseDetail[purchaseDetails.length+1]);
+			purchaseDetails[purchaseDetails.length-1] = purchaseDetail;
 		}else{
 			updatePurchaseDetail(pd, purchaseDetail);
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Checks if Purchase with same id exists. If no, creates one.
 	 * If it does, updates its details and the purchase details.
@@ -175,7 +195,7 @@ public class DummySqlInstance implements IPurchaseDS {
 		p.setProductType(purchase.getProductType());
 		p.setExpires(purchase.getExpires());
 		p.setPurchaseDetails(purchase.getPurchaseDetails());
-		
+
 		//find removed Details and gather them for removal
 		List<PurchaseDetail> toRemove = new ArrayList<PurchaseDetail>();
 		for(PurchaseDetail oldPd : p.getPurchaseDetails()){
