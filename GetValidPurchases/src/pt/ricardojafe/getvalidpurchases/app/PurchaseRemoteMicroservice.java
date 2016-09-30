@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.logging.Logger;
 
@@ -16,14 +14,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import pt.ricardojafe.getvalidpurchases.persistance.AbstractDatasourceFactory;
+import pt.ricardojafe.getvalidpurchases.persistance.DummySqlInstance;
+import pt.ricardojafe.getvalidpurchases.service.PurchaseLocalService;
+
 @WebServlet(name = "purchaseWs", urlPatterns = {"/Purchase"})
-public class Purchase extends HttpServlet {
+public class PurchaseRemoteMicroservice extends HttpServlet {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	Logger _log = Logger.getLogger("Purchase");
+	//this would be injected or configured in external file. Using DummySqlInstance for brevity
+	AbstractDatasourceFactory dataSourceFactory = new AbstractDatasourceFactory(new DummySqlInstance());
+	PurchaseLocalService service = new PurchaseLocalService(dataSourceFactory);
 	
 	
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -31,15 +36,39 @@ public class Purchase extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 
 		Enumeration<String> params = request.getParameterNames();
+		String purchaseServiceResponse = null;
 		while(params.hasMoreElements()){
-			System.out.println(params.nextElement());
+			String paramName = params.nextElement();
+			if(paramName.toLowerCase().equals("service")){
+				String serviceName = request.getParameter(paramName);
+				switch(serviceName){
+					case "getValidPurchases":purchaseServiceResponse = getParametersAndCallGetValidPurchases(request);break;
+					case "createOrUpdatePurchase":purchaseServiceResponse = getParametersAndCallCreateOrUpdatePurchase(request);break;
+					case "createOrUpdatePurchaseDetail":purchaseServiceResponse = getParametersAndCallCreateOrUpdatePurchaseDetail(request);break;
+				}
+				_log.info("Parameter Name - "+paramName+", Value - "+request.getParameter(paramName));
+			}
 		}
-		String textResponse = "HI!";
 
 		PrintWriter out = response.getWriter();
-		out.println(textResponse);
+		out.println(purchaseServiceResponse);
 	}
 	
+	private String getParametersAndCallCreateOrUpdatePurchaseDetail(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private String getParametersAndCallCreateOrUpdatePurchase(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private String getParametersAndCallGetValidPurchases(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public static String getBody(HttpServletRequest request) throws IOException {
 
 		String body = null;
@@ -106,7 +135,7 @@ public class Purchase extends HttpServlet {
 	 * @return a String containing servlet description
 	 */
 	public String getServletInfo() {
-		return "Short description";
+		return "Purchase Service";
 	}// </editor-fold>
 	
 }

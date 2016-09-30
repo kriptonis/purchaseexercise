@@ -8,7 +8,7 @@ import pt.ricardojafe.getvalidpurchases.model.PurchaseDetail;
 import pt.ricardojafe.getvalidpurchases.persistance.AbstractDatasourceFactory;
 import pt.ricardojafe.getvalidpurchases.persistance.IPurchaseDS;
 
-public class PurchaseService {
+public class PurchaseLocalService {
 
 	/*TODO: Do the metrics for each service (by priority order): 
 	*										Times called, 
@@ -20,7 +20,7 @@ public class PurchaseService {
 	
 	private IPurchaseDS datasource;
 	
-	public PurchaseService(AbstractDatasourceFactory adf) {
+	public PurchaseLocalService(AbstractDatasourceFactory adf) {
 		datasource = adf.getDSInstance();
 	}
 	
