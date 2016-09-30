@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.logging.Logger;
 
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import pt.ricardojafe.getvalidpurchases.model.Purchase;
+import pt.ricardojafe.getvalidpurchases.model.PurchaseDetail;
 import pt.ricardojafe.getvalidpurchases.persistance.AbstractDatasourceFactory;
 import pt.ricardojafe.getvalidpurchases.persistance.DummySqlInstance;
 import pt.ricardojafe.getvalidpurchases.service.PurchaseLocalService;
@@ -42,7 +45,7 @@ public class PurchaseRemoteMicroservice extends HttpServlet {
 			if(paramName.toLowerCase().equals("service")){
 				String serviceName = request.getParameter(paramName);
 				switch(serviceName){
-					case "getValidPurchases":purchaseServiceResponse = getParametersAndCallGetValidPurchases(request);break;
+					case "getValidPurchases":purchaseServiceResponse = callGetValidPurchases(request);break;
 					case "createOrUpdatePurchase":purchaseServiceResponse = getParametersAndCallCreateOrUpdatePurchase(request);break;
 					case "createOrUpdatePurchaseDetail":purchaseServiceResponse = getParametersAndCallCreateOrUpdatePurchaseDetail(request);break;
 				}
@@ -54,20 +57,29 @@ public class PurchaseRemoteMicroservice extends HttpServlet {
 		out.println(purchaseServiceResponse);
 	}
 	
-	private String getParametersAndCallCreateOrUpdatePurchaseDetail(HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+	private String callGetValidPurchases(HttpServletRequest request) {
+		return service.getValidPurchases().toString();
 	}
-
+	
 	private String getParametersAndCallCreateOrUpdatePurchase(HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+		long id = Long.parseLong(request.getParameter("id"));
+		String productType = request.getParameter("productType");
+		Date expires = new Date(Long.parseLong(request.getParameter("expires")));
+		request.getParameter("purchaseDetails");
+		
+		return service.updateOrCreatePurchase(new Purchase(id, productType, expires)) ? "true" : "false";
 	}
 
-	private String getParametersAndCallGetValidPurchases(HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+	private String getParametersAndCallCreateOrUpdatePurchaseDetail(HttpServletRequest request) {
+		long id = Long.parseLong(request.getParameter("id"));
+		String description = request.getParameter("description");
+		int quantity = Integer.parseInt(request.getParameter("quantity"));
+		double value = Double.parseDouble(request.getParameter("value"));
+		
+		return service.updateOrCreatePurchaseDetail(new PurchaseDetail(id, description, quantity, value)) ? "true" : "false";
 	}
+
+
 
 	public static String getBody(HttpServletRequest request) throws IOException {
 
