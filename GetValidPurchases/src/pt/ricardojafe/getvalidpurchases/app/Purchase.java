@@ -23,7 +23,7 @@ public class Purchase extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	Logger _log = Logger.getLogger("Sage");
+	Logger _log = Logger.getLogger("Purchase");
 	
 	
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -108,13 +108,5 @@ public class Purchase extends HttpServlet {
 	public String getServletInfo() {
 		return "Short description";
 	}// </editor-fold>
-
-	public static void main(String[] args) throws UnsupportedEncodingException {
-		String s = "xml=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22%3F%3E%0A%3Cmapi%3E%3Cmapiversion%3E1.0%3C%2Fmapiversion%3E%3Cmd5content%3Ef6d09b545bfeb4111552fbf007608674%3C%2Fmd5content%3E%3Cresult%3E%3Coperation%3Eauthorization%3C%2Foperation%3E%3Cstatus%3Enok%3C%2Fstatus%3E%3Cdate%3E2016-06-07%3C%2Fdate%3E%3Ctime%3E11%3A16%3A56+UTC%2B0000%3C%2Ftime%3E%3CorigAmount%3E106.25%3C%2ForigAmount%3E%3CorigCurrency%3EEUR%3C%2ForigCurrency%3E%3CidForMerchant%3E495738%3C%2FidForMerchant%3E%3CemailClient%3Emarketing%40gfi.pt%3C%2FemailClient%3E%3CidClient%3E495454%3C%2FidClient%3E%3CmerchantDatas%3E++++%3C_aKey_id_client%3E2000%3C%2F_aKey_id_client%3E++++%3C_aKey_name%3Emy+client+name%3C%2F_aKey_name%3E++%3C%2FmerchantDatas%3E%3CcardCountry%3EFR%3C%2FcardCountry%3E%3CipCountry%3EPT%3C%2FipCountry%3E%3Ctransid%3E5756AD2162467200%3C%2Ftransid%3E%3Cis3ds%3ENo%3C%2Fis3ds%3E%3CpaymentMethod%3ECB%3C%2FpaymentMethod%3E%3CrefProduct0%3E29403%3C%2FrefProduct0%3E%3CcustomerCountry%3EPT%3C%2FcustomerCountry%3E%3C%2Fresult%3E%3C%2Fmapi%3E%0A";
-		s = URLDecoder.decode(s,"UTF-8");
-		if(s.startsWith("xml="))
-			s = s.substring(4);
-		System.out.println(URLDecoder.decode(s, "UTF-8"));
-	}
 	
 }

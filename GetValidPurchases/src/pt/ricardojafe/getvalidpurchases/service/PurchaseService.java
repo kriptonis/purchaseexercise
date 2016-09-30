@@ -1,9 +1,12 @@
 package pt.ricardojafe.getvalidpurchases.service;
 
-import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import pt.ricardojafe.getvalidpurchases.model.Purchase;
 import pt.ricardojafe.getvalidpurchases.model.PurchaseDetail;
+import pt.ricardojafe.getvalidpurchases.persistance.AbstractDatasourceFactory;
+import pt.ricardojafe.getvalidpurchases.persistance.IPurchaseDS;
 
 public class PurchaseService {
 
@@ -15,16 +18,22 @@ public class PurchaseService {
 	*										Max waiting time
 	*/
 	
-	public ArrayList<Purchase> getValidPurchases(){
-		return null;
+	private IPurchaseDS datasource;
+	
+	public PurchaseService(AbstractDatasourceFactory adf) {
+		datasource = adf.getDSInstance();
+	}
+	
+	public List<Purchase> getValidPurchases(){
+		return datasource.getValidPurchases(new Date());
 	}
 	
 	public boolean updateOrCreatePurchase(Purchase purchase){
-		return false;
+		return datasource.createOrUpdatePurchase(purchase);
 	}
 	
 	public boolean updateOrCreatePurchaseDetail(PurchaseDetail purchaseDetail){
-		return false;
+		return datasource.createOrUpdatePurchaseDetail(purchaseDetail);
 	}
 	
 

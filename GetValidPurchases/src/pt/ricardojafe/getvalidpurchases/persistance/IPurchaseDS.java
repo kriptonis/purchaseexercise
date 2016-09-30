@@ -1,25 +1,28 @@
 package pt.ricardojafe.getvalidpurchases.persistance;
 
-import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import pt.ricardojafe.getvalidpurchases.model.Purchase;
 import pt.ricardojafe.getvalidpurchases.model.PurchaseDetail;
 
 public interface IPurchaseDS {
 	
-	public Purchase getPurchaseById(String purchaseId);
+	public List<Purchase> getValidPurchases(Date date);
 	
-	public ArrayList<Purchase> getPurchasesByIds(String [] ids);
+	public Purchase getPurchaseById(long purchaseId);
 	
-	public PurchaseDetail getPurchaseDetailById(String purchaseId);
+	public List<Purchase> getPurchasesByIds(long [] ids);
 	
-	public PurchaseDetail getPurchaseDetailsByPurchaseId(String purchaseId);
+	public PurchaseDetail getPurchaseDetailById(long purchaseId);
 	
-	public ArrayList<PurchaseDetail> getPurchaseDetailsByPurchaseIds(String [] ids);
+	public List<PurchaseDetail> getPurchaseDetailsByPurchaseId(long purchaseId);
 	
-	public ArrayList<Purchase> getAllPurchasesPaginatedOrderedById(String startId, String endId);
+	public List<PurchaseDetail> getPurchaseDetailsByPurchaseIds(long [] ids);
 	
-	public ArrayList<PurchaseDetail> getAllPurchaseDetailsPaginatedOrderedById(String startId, String endId);
+	public List<Purchase> getAllPurchasesPaginatedOrderedById(long startId, long endId);
+	
+	public List<PurchaseDetail> getAllPurchaseDetailsPaginatedOrderedById(long startId, long endId);
 	
 	public boolean createOrUpdatePurchase(Purchase purchase);
 	
