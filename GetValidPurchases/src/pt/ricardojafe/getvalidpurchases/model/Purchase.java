@@ -26,6 +26,14 @@ public class Purchase {
 		this.productType = productType;
 		this.expires = expires;
 	}
+	
+	public Purchase(long id, String productType, Date expires, List<PurchaseDetail> purchaseDetails) {
+		super();
+		this.id = id;
+		this.productType = productType;
+		this.expires = expires;
+		this.purchaseDetails = purchaseDetails;
+	}
 
 	public long getId() {
 		return id;

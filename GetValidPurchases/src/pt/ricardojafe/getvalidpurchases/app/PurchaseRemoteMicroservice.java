@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -65,9 +67,24 @@ public class PurchaseRemoteMicroservice extends HttpServlet {
 		long id = Long.parseLong(request.getParameter("id"));
 		String productType = request.getParameter("productType");
 		Date expires = new Date(Long.parseLong(request.getParameter("expires")));
-		request.getParameter("purchaseDetails");
+		String toParse = request.getParameter("purchaseDetails");
+		List<PurchaseDetail> parsedDetails = parseDetails(toParse);
 		
-		return service.updateOrCreatePurchase(new Purchase(id, productType, expires)) ? "true" : "false";
+		return service.updateOrCreatePurchase(new Purchase(id, productType, expires, parsedDetails)) ? "true" : "false";
+	}
+
+	private List<PurchaseDetail> parseDetails(String toParse) {
+		List<PurchaseDetail> returnSet = new ArrayList<PurchaseDetail>();
+		String [] details = toParse.split(";");
+		for(String d : details){
+			String [] fields = d.split(",");
+			long id = Long.parseLong(fields[0]);
+			String description = fields[1];
+			int quantity = Integer.parseInt(fields[2]);
+			double value = Double.parseDouble(fields[3]);
+			returnSet.add(new PurchaseDetail(id, description, quantity, value));
+		}
+		return returnSet;
 	}
 
 	private String getParametersAndCallCreateOrUpdatePurchaseDetail(HttpServletRequest request) {
