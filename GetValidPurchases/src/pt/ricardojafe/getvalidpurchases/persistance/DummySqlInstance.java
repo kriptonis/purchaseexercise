@@ -2,9 +2,11 @@ package pt.ricardojafe.getvalidpurchases.persistance;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
@@ -15,12 +17,11 @@ import pt.ricardojafe.getvalidpurchases.model.PurchaseDetail;
 
 public class DummySqlInstance implements IPurchaseDS {
 
-	private static Date today = new Date();//helper to always have same test behaviour in the dummy data
 	private Purchase [] purchases = { 
-			new Purchase(1,"CoolType",new Date(today.getTime() + (1000 * 60 * 60 * 24))),
-			new Purchase(2,"HotType",new Date(today.getTime() + (1000 * 60 * 60 * 24 * 30))),
-			new Purchase(3,"WarmType",new Date(today.getTime() + (1000 * 60 * 60 * 24 * 7))),
-			new Purchase(4,"ExpiredType",new Date(today.getTime() - (1000 * 60 * 60 * 24 * 7))),
+			new Purchase(1,"CoolType",getDate(1)),
+			new Purchase(2,"HotType", getDate(30)),
+			new Purchase(3,"WarmType",   getDate(7)),
+			new Purchase(4,"ExpiredType",getDate(-7)),
 	};
 	private PurchaseDetail [] purchaseDetails={
 			new PurchaseDetail(101, "Banana", 10, 5),
@@ -29,7 +30,7 @@ public class DummySqlInstance implements IPurchaseDS {
 			new PurchaseDetail(104, "Lampadas", 12, 25),
 			new PurchaseDetail(105, "Pen 6Gb", 3, 11),
 			new PurchaseDetail(106, "Resmas Papel", 23, 98),
-			new PurchaseDetail(106, "Disketes", 123, 200),
+			new PurchaseDetail(107, "Disketes", 123, 200),
 	};
 
 	public DummySqlInstance() {
@@ -37,6 +38,12 @@ public class DummySqlInstance implements IPurchaseDS {
 		purchases[1].setPurchaseDetails(Arrays.asList(purchaseDetails[2],purchaseDetails[3]));
 		purchases[2].setPurchaseDetails(Arrays.asList(purchaseDetails[4],purchaseDetails[5]));
 		purchases[3].setPurchaseDetails(Arrays.asList(purchaseDetails[6]));
+	}
+
+	private Date getDate(int i) {
+		Calendar c=new GregorianCalendar();
+		c.add(Calendar.DATE, i);
+		return c.getTime();
 	}
 
 	/**
@@ -163,8 +170,8 @@ public class DummySqlInstance implements IPurchaseDS {
 		Purchase p = getPurchaseById(purchase.getId());
 		if(p == null){
 			List<Purchase> aux = Arrays.asList(purchases);
-			aux.add(purchase);
-			purchases = aux.toArray(purchases);
+			purchases = aux.toArray(new Purchase[purchases.length+1]);
+			purchases[purchases.length-1] = purchase;
 		}else{
 			updatePurchase(p, purchase);
 		}
@@ -225,5 +232,29 @@ public class DummySqlInstance implements IPurchaseDS {
 	public boolean disconnect() {
 		return true;
 	}
+
+	@Override
+	public int getPurchaseCount() {
+		return purchases.length;
+	}
+
+	@Override
+	public int getPurchaseDetailCount() {
+		return purchaseDetails.length; 
+	}
+	
+	public static void main(String[] args) {
+		Date today = new Date();
+		Calendar c=new GregorianCalendar();
+		c.add(Calendar.DATE, 30);
+		Date d=c.getTime();
+		System.out.println(new Date(today.getTime() + (1000 * 60 * 60 * 24)));
+		System.out.println(d);
+		System.out.println(new Date(today.getTime() + (1000 * 60 * 60 * 24 * 60)));
+		
+
+		
+	}
+	
 
 }

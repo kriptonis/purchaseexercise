@@ -50,6 +50,10 @@ public class PurchaseRemoteMicroservice extends HttpServlet {
 					case "getValidPurchases":purchaseServiceResponse = callGetValidPurchases(request);break;
 					case "createOrUpdatePurchase":purchaseServiceResponse = getParametersAndCallCreateOrUpdatePurchase(request);break;
 					case "createOrUpdatePurchaseDetail":purchaseServiceResponse = getParametersAndCallCreateOrUpdatePurchaseDetail(request);break;
+					case "getPurchaseById":purchaseServiceResponse = getParametersAndCallGetPurchaseById(request);break;
+					case "getPurchaseDetailById":purchaseServiceResponse = getParametersAndCallGetPurchaseDetailById(request);break;
+					case "getPurchaseCount":purchaseServiceResponse = service.countPurchases()+"";break;
+					case "getPurchaseDetailCount":purchaseServiceResponse = service.countPurchaseDetails()+"";break;
 				}
 				_log.info("Parameter Name - "+paramName+", Value - "+request.getParameter(paramName));
 			}
@@ -58,7 +62,7 @@ public class PurchaseRemoteMicroservice extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		out.println(purchaseServiceResponse);
 	}
-	
+
 	private String callGetValidPurchases(HttpServletRequest request) {
 		return service.getValidPurchases().toString();
 	}
@@ -95,8 +99,16 @@ public class PurchaseRemoteMicroservice extends HttpServlet {
 		
 		return service.updateOrCreatePurchaseDetail(new PurchaseDetail(id, description, quantity, value)) ? "true" : "false";
 	}
-
-
+	
+	private String getParametersAndCallGetPurchaseById(HttpServletRequest request) {
+		long id = Long.parseLong(request.getParameter("id"));
+		return service.getPurchaseById(id).toString();
+	}
+	
+	private String getParametersAndCallGetPurchaseDetailById(HttpServletRequest request) {
+		long id = Long.parseLong(request.getParameter("id"));
+		return service.getPurchaseDetailById(id).toString();
+	}
 
 	public static String getBody(HttpServletRequest request) throws IOException {
 

@@ -28,6 +28,10 @@ public interface IPurchaseDS {
 	
 	public boolean createOrUpdatePurchaseDetail(PurchaseDetail purchase);
 	
+	public int getPurchaseCount();
+	
+	public int getPurchaseDetailCount();
+	
 	public boolean connect();
 	
 	public boolean disconnect();

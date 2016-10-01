@@ -36,5 +36,20 @@ public class PurchaseLocalService {
 		return datasource.createOrUpdatePurchaseDetail(purchaseDetail);
 	}
 	
+	public Purchase getPurchaseById(long purchaseId){
+		return datasource.getPurchaseById(purchaseId);
+	}
+	
+	public PurchaseDetail getPurchaseDetailById(long purchaseDetailId){
+		return datasource.getPurchaseDetailById(purchaseDetailId);
+	}
+	
+	public int countPurchases(){
+		return datasource.getPurchaseCount();
+	}
+	
+	public int countPurchaseDetails(){
+		return datasource.getPurchaseDetailCount();
+	}
 
 }
