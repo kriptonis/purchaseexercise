@@ -19,37 +19,98 @@ public class PurchaseLocalService {
 	*/
 	
 	private IPurchaseDS datasource;
+	private long numberOfRequests = 0;
+	private long totalDurationOfRequests = 0;
+	private long averageTimePerRequest = 0;
+	private long maxRequestDuration = 0;
 	
 	public PurchaseLocalService(AbstractDatasourceFactory adf) {
 		datasource = adf.getDSInstance();
 	}
 	
 	public List<Purchase> getValidPurchases(){
-		return datasource.getValidPurchases(new Date());
+		long startTime = System.nanoTime();
+		numberOfRequests++;
+		List<Purchase> result = datasource.getValidPurchases(new Date());
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);
+		totalDurationOfRequests += duration;
+		maxRequestDuration = duration > maxRequestDuration ? duration : maxRequestDuration;
+		return result;
 	}
 	
 	public boolean updateOrCreatePurchase(Purchase purchase){
-		return datasource.createOrUpdatePurchase(purchase);
+		long startTime = System.nanoTime();
+		numberOfRequests++;
+		boolean result = datasource.createOrUpdatePurchase(purchase);
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);
+		totalDurationOfRequests += duration;
+		maxRequestDuration = duration > maxRequestDuration ? duration : maxRequestDuration;
+		return result;
 	}
 	
 	public boolean updateOrCreatePurchaseDetail(PurchaseDetail purchaseDetail){
-		return datasource.createOrUpdatePurchaseDetail(purchaseDetail);
+		long startTime = System.nanoTime();
+		numberOfRequests++;
+		boolean result = datasource.createOrUpdatePurchaseDetail(purchaseDetail);
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);
+		totalDurationOfRequests += duration;
+		maxRequestDuration = duration > maxRequestDuration ? duration : maxRequestDuration;
+		return result;
 	}
 	
 	public Purchase getPurchaseById(long purchaseId){
-		return datasource.getPurchaseById(purchaseId);
+		long startTime = System.nanoTime();
+		numberOfRequests++;
+		Purchase result = datasource.getPurchaseById(purchaseId);
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);
+		totalDurationOfRequests += duration;
+		maxRequestDuration = duration > maxRequestDuration ? duration : maxRequestDuration;
+		return result;
 	}
 	
 	public PurchaseDetail getPurchaseDetailById(long purchaseDetailId){
-		return datasource.getPurchaseDetailById(purchaseDetailId);
+		long startTime = System.nanoTime();
+		numberOfRequests++;
+		PurchaseDetail result = datasource.getPurchaseDetailById(purchaseDetailId);
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);
+		totalDurationOfRequests += duration;
+		maxRequestDuration = duration > maxRequestDuration ? duration : maxRequestDuration;
+		return result;
 	}
 	
 	public int countPurchases(){
-		return datasource.getPurchaseCount();
+		long startTime = System.nanoTime();
+		numberOfRequests++;
+		int result = datasource.getPurchaseCount();
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);
+		totalDurationOfRequests += duration;
+		maxRequestDuration = duration > maxRequestDuration ? duration : maxRequestDuration;
+		return result;
 	}
 	
 	public int countPurchaseDetails(){
-		return datasource.getPurchaseDetailCount();
+		long startTime = System.nanoTime();
+		numberOfRequests++;
+		int result = datasource.getPurchaseDetailCount();
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);
+		totalDurationOfRequests += duration;
+		maxRequestDuration = duration > maxRequestDuration ? duration : maxRequestDuration;
+		return result;
+	}
+	
+	public String getMetrics(){
+		averageTimePerRequest = totalDurationOfRequests / numberOfRequests;
+		
+		return "Average time per Request : "	+ averageTimePerRequest + "ms"+"\n"+
+				"Maximum Request Duration : "	+ maxRequestDuration 	+ "ms"+"\n"+
+				"Total Requests : "				+ numberOfRequests 		+ "ms"+"\n";
 	}
 
 }

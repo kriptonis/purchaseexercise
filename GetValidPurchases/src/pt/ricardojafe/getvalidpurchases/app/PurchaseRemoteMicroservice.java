@@ -54,6 +54,7 @@ public class PurchaseRemoteMicroservice extends HttpServlet {
 					case "getPurchaseDetailById":purchaseServiceResponse = getParametersAndCallGetPurchaseDetailById(request);break;
 					case "getPurchaseCount":purchaseServiceResponse = service.countPurchases()+"";break;
 					case "getPurchaseDetailCount":purchaseServiceResponse = service.countPurchaseDetails()+"";break;
+					case "metrics":purchaseServiceResponse = service.getMetrics();break;
 				}
 				_log.info("Parameter Name - "+paramName+", Value - "+request.getParameter(paramName));
 			}
