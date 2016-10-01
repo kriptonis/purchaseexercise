@@ -148,7 +148,9 @@ public class PurchaseLocalService {
 	 * @return
 	 */
 	public String getMetrics(){
-		averageTimePerRequest = totalDurationOfRequests / numberOfRequests / 1000000;
+		if(numberOfRequests != 0){
+			averageTimePerRequest = totalDurationOfRequests / numberOfRequests / 1000000;
+		}
 		
 		return "Average time per Request : " + averageTimePerRequest 	    + "ms"+"\n"+
 				"Maximum Request Duration : "+ maxRequestDuration / 1000000 + "ms"+"\n"+

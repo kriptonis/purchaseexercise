@@ -11,3 +11,5 @@ http://localhost:8080/PurchaseMicroservice/Purchase?service=getPurchaseDetailCou
 http://localhost:8080/PurchaseMicroservice/Purchase?service=getPurchaseCount
 http://localhost:8080/PurchaseMicroservice/Purchase?service=metrics
 
+TO scale the service, several instances can be run in same container, same VM or in multiple containers or VMs, behind a load balancer for example.
+SLA can be monitored via the available metrics service.
