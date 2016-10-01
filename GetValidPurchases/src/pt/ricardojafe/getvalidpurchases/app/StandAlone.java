@@ -1,6 +1,14 @@
 package pt.ricardojafe.getvalidpurchases.app;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import pt.ricardojafe.getvalidpurchases.model.Purchase;
+import pt.ricardojafe.getvalidpurchases.model.PurchaseDetail;
+import pt.ricardojafe.getvalidpurchases.persistance.AbstractDatasourceFactory;
+import pt.ricardojafe.getvalidpurchases.persistance.DummySqlInstance;
+import pt.ricardojafe.getvalidpurchases.service.PurchaseLocalService;
 
 /**
  *
@@ -31,11 +39,21 @@ Feel free to add other relevant operations in the context of a microservice.
  */
 public class StandAlone {
 
-	public static void main(String[] args) {
-		Date d = new Date();
-		
-		System.out.println(d.getTime());
-
+	public static void main(String[] args) throws InterruptedException {
+		PurchaseLocalService purchaseLocalService = 
+											new PurchaseLocalService(
+															new AbstractDatasourceFactory(new DummySqlInstance()));
+		System.out.println("Number of Purchases: "+purchaseLocalService.countPurchases());
+		System.out.println("Number of Purchase Details: "+purchaseLocalService.countPurchaseDetails());
+		System.out.println("Valid Purchases: "+purchaseLocalService.getValidPurchases());
+		System.out.println("Purchases w/ ID=1: "+purchaseLocalService.getPurchaseById(1));
+		List<PurchaseDetail> details = new ArrayList<PurchaseDetail>();
+		details.add(new PurchaseDetail(666, "Hello detail", 2, 50));
+		System.out.println("Created new Purchase Detail: "+purchaseLocalService.updateOrCreatePurchaseDetail(details.get(0)));
+		System.out.println("Created new Purchase : "+purchaseLocalService.updateOrCreatePurchase(new Purchase(999, "Fake type", new Date(),details)));
+		System.out.println("Number of Purchases: "+purchaseLocalService.countPurchases());
+		System.out.println("Number of Purchase Details: "+purchaseLocalService.countPurchaseDetails());
+		System.out.println("Service Metrics: "+purchaseLocalService.getMetrics());
 	}
 
 }

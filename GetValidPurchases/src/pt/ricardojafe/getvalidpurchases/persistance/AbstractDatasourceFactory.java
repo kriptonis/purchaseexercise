@@ -1,7 +1,9 @@
 package pt.ricardojafe.getvalidpurchases.persistance;
 
 /**
- * Provides the DataSource for the Purchase Service
+ * The Abstract Datasource factory provides the datasource to the Purchase Microservice,
+ * allowing the service to be completely database-agnostic.
+ * 
  * @author ricardo.jafe
  *
  */

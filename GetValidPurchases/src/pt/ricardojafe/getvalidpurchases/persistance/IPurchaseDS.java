@@ -6,6 +6,11 @@ import java.util.List;
 import pt.ricardojafe.getvalidpurchases.model.Purchase;
 import pt.ricardojafe.getvalidpurchases.model.PurchaseDetail;
 
+/**
+ * Interface that must be implemented by any datasource that needs to serve the Purchase microservice. 
+ * @author ricardo.jafe
+ *
+ */
 public interface IPurchaseDS {
 	
 	public List<Purchase> getValidPurchases(Date date);

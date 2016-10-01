@@ -7,6 +7,12 @@ import java.util.List;
 import pt.ricardojafe.getvalidpurchases.model.Purchase;
 import pt.ricardojafe.getvalidpurchases.model.PurchaseDetail;
 
+
+/**
+ * Stubs for MySQL support
+ * @author ricardo.jafe
+ *
+ */
 public class MySqlInstance implements IPurchaseDS {
 
 	@Override

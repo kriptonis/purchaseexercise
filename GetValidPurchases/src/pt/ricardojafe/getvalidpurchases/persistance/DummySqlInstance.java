@@ -15,14 +15,23 @@ import java.util.stream.Collectors;
 import pt.ricardojafe.getvalidpurchases.model.Purchase;
 import pt.ricardojafe.getvalidpurchases.model.PurchaseDetail;
 
+/**
+ * The DummySQLInstance serves two purposes:
+ * -> To allow tests without need of an actual DB or embeded DB;
+ * -> To allow development of the Purchase microservice in a decoupled way from the Database team
+ * @author ricardo.jafe
+ *
+ */
 public class DummySqlInstance implements IPurchaseDS {
 
+	//init of dummy purchase data
 	private Purchase [] purchases = { 
 			new Purchase(1,"CoolType",getDate(1)),
 			new Purchase(2,"HotType", getDate(30)),
 			new Purchase(3,"WarmType",   getDate(7)),
 			new Purchase(4,"ExpiredType",getDate(-7)),
 	};
+	//init of dummy purchase detail data
 	private PurchaseDetail [] purchaseDetails={
 			new PurchaseDetail(101, "Banana", 10, 5),
 			new PurchaseDetail(102, "Morango", 7, 5),
@@ -33,6 +42,7 @@ public class DummySqlInstance implements IPurchaseDS {
 			new PurchaseDetail(107, "Disketes", 123, 200),
 	};
 
+	//the constructor just sets the purchase details to the purchases.
 	public DummySqlInstance() {
 		purchases[0].setPurchaseDetails(Arrays.asList(purchaseDetails[0],purchaseDetails[1]));
 		purchases[1].setPurchaseDetails(Arrays.asList(purchaseDetails[2],purchaseDetails[3]));
@@ -223,11 +233,13 @@ public class DummySqlInstance implements IPurchaseDS {
 		pd.setValue(purchaseDetail.getValue());
 	}
 
+	//no real function in dummy class
 	@Override
 	public boolean connect() {
 		return true;
 	}
-
+	
+	//yep, no real function either.
 	@Override
 	public boolean disconnect() {
 		return true;
@@ -242,19 +254,4 @@ public class DummySqlInstance implements IPurchaseDS {
 	public int getPurchaseDetailCount() {
 		return purchaseDetails.length; 
 	}
-	
-	public static void main(String[] args) {
-		Date today = new Date();
-		Calendar c=new GregorianCalendar();
-		c.add(Calendar.DATE, 30);
-		Date d=c.getTime();
-		System.out.println(new Date(today.getTime() + (1000 * 60 * 60 * 24)));
-		System.out.println(d);
-		System.out.println(new Date(today.getTime() + (1000 * 60 * 60 * 24 * 60)));
-		
-
-		
-	}
-	
-
 }
